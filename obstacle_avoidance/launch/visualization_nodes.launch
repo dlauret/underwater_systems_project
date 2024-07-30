@@ -1,0 +1,19 @@
+<launch>
+    <!-- Range Visualizer node  -->
+    <node name="range_to_rviz" pkg="obstacle_avoidance" type="range_visualizer.py" cwd="node" output="screen" />
+
+    <!-- tf_updater node  -->
+    <node name="tf_and_zeno_visualizer" pkg="obstacle_avoidance" type="tf_updater.py" cwd="node" output="screen" />
+
+    <!-- map_visualizer node  -->
+    <node name="map_visualizer" pkg="obstacle_avoidance" type="map_visualizer.py" cwd="node" output="screen" />
+
+    <!-- Rviz Launch  -->
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find obstacle_avoidance)/obs_avoid_config.rviz"/>
+
+    <!-- Recording Data -->
+     <![CDATA[
+    <node pkg="rosbag" type="record" name="bag_recorder_2" output="screen" args="--split --duration=5m -O /home/dawid/obstacle_avoidance_bag/obstacle_avoidance_bag_2.bag /nav_status /updated_cells /sonar_data /relative_error /goal_position /v_map /way_points /sonar_range_laser /sonar_range /uncertain_map" />
+    ]]>
+
+</launch>

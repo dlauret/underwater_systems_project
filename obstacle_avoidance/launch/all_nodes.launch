@@ -1,0 +1,39 @@
+<launch>
+    <!-- Range Visualizer node  -->
+    <node name="range_to_rviz" pkg="obstacle_avoidance" type="range_visualizer.py" cwd="node" output="screen" />
+
+    <!-- tf_updater node  -->
+    <node name="tf_and_zeno_visualizer" pkg="obstacle_avoidance" type="tf_updater.py" cwd="node" output="screen" />
+
+     <!-- map_visualizer node  -->
+    <node name="map_visualizer" pkg="obstacle_avoidance" type="map_visualizer.py" cwd="node" output="screen" />
+
+    <!-- Rviz Launch  -->
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find obstacle_avoidance)/obs_avoid_config.rviz"/>
+
+    <!-- Recording Data -->
+    <![CDATA[
+    <node pkg="rosbag" type="record" name="bag_recorder_3" output="screen" args="--split --duration=10m -O /home/dawid/obstacle_avoidance_bag/obstacle_avoidance_bag_3.bag /nav_status /updated_cells /sonar_data /relative_error /goal_position /v_map /way_points /sonar_range_laser /sonar_range /uncertain_map" />
+    ]]>
+    <!-- Zeno Simulation node launch  -->
+    <!--node name="Zeno_Model" pkg="obstacle_avoidance" type="zeno_kinematic_model.py" cwd="node" output="screen" /-->
+    <node name="zeno_model" pkg="obstacle_avoidance" type="zeno_dynamic_model.py" cwd="node" output="screen" />
+
+    <!-- MultiBeam Sonar node launch  -->
+    <node name="multi_beam_sonar" pkg="obstacle_avoidance" type="multi_beam_sonar.py" cwd="node" output="screen" />
+
+    <!-- Virtual Map node launch  -->
+    <node name="v_map_generator" pkg="obstacle_avoidance" type="v_map_generator.py" cwd="node" output="screen" />
+
+    <!-- Path Generator node launch  -->
+    <node name="path_generator" pkg="obstacle_avoidance" type="path_planning.py" cwd="node" output="screen" />
+        <param name="/MODE_YAW" type="str" value="uniform" />
+        <param name="/MODE_SURGE" type="str" value="steer sensitive speed" />
+        <param name="/MODE_ZENO" type="str" value="stop" />
+        <param name="/Number_of_WP" type="int" value="3" />
+        <param name="/surge_min" type="double" value="0.02" />
+        <param name="/ANGLE_OUTPUT" type="str" value="deg" />
+        <param name="/ANGLE_INPUT" type="str" value="radians" />
+        <rosparam param="/goal_position">[43.70640777,10.47575093]</rosparam>
+
+</launch>
